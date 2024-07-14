@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   useAccount,
@@ -11,8 +11,10 @@ import {
 import { parseEther } from "viem";
 import { toast } from "sonner";
 import { useWeb3Modal } from "@web3modal/wagmi/react";
+import GameCanvas from "@/components/GameCanvas";
 
 export default function Home() {
+  const [gameStarted, setGameStarted] = useState(false);
   const { isConnected } = useAccount();
   const { signMessage } = useSignMessage();
   const { sendTransaction, data: hash } = useSendTransaction();
@@ -52,40 +54,22 @@ export default function Home() {
   return (
     <main>
       <section className="py-12 flex flex-col items-center text-center gap-8">
-        <h1 className="text-4xl font-bold">Web3 Starter Kit</h1>
-        <p className="text-2xl text-muted-foreground">
+        <h1 className="text-4xl font-bold">The legend of Omnichain</h1>
+        {/* <p className="text-2xl text-muted-foreground">
           Build your dapp frontends with the latest tools.
-        </p>
+        </p> */}
       </section>
       <div className="flex gap-6 items-center justify-center">
-        {!isConnected ? (
-          <Button onClick={handleConnect}>Connect Wallet</Button>
-        ) : (
-          <>
-            <Button onClick={handleConnect}>Info</Button>
-            <Button onClick={() => signMessage({ message: "gm" })}>
-              {" "}
-              Say GM{" "}
-            </Button>
-            <Button
-              onClick={() =>
-                sendTransaction({
-                  to: "0x1a343eFB966E63bfA25A2b368455448f02466Ffc",
-                  value: parseEther("0.1"),
-                })
-              }
-              disabled={isConfirming}
-              variant={"secondary"}
-            >
-              Tip .1 Eth
-            </Button>
-          </>
-        )}
-      </div>
-      <div className="flex mt-10 items-center justify-center">
-        <Link href="/counter">
-          <Button className="w-60">Counter</Button>
-        </Link>
+        <div>
+      {gameStarted ? (
+        <GameCanvas />
+      ) : (
+        <button onClick={() => setGameStarted(true)}>Start Game</button>
+      )}
+      {/* <GameCanvas /> */}
+    </div>
+        
+
       </div>
     </main>
   );
